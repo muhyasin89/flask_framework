@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 """User models."""
 import datetime as dt
+import phonenumbers
 
 from flask_login import UserMixin
+from wtforms import StringField
+from wtforms.validators import DataRequired, ValidationError
 
 from flask_framework.database import (
     Column,
@@ -42,7 +45,10 @@ class User(UserMixin, PkModel):
     created_at = Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
     first_name = Column(db.String(30), nullable=True)
     last_name = Column(db.String(30), nullable=True)
+    date_of_birth =  Column(db.DateTime())
+    address = Column(db.Text())
     active = Column(db.Boolean(), default=False)
+    phonenumber = StringField('Phone', validators=[DataRequired()])
     is_admin = Column(db.Boolean(), default=False)
 
     def __init__(self, username, email, password=None, **kwargs):
@@ -60,6 +66,14 @@ class User(UserMixin, PkModel):
     def check_password(self, value):
         """Check password."""
         return bcrypt.check_password_hash(self.password, value)
+
+    def validate_phone(self, phone):
+        try:
+            p = phonenumbers.parse(phone.data)
+            if not phonenumbers.is_valid_number(p):
+                raise ValueError()
+        except (phonenumbers.phonenumberutil.NumberParseException, ValueError):
+            raise ValidationError('Invalid phone number')
 
     @property
     def full_name(self):

@@ -17,6 +17,8 @@ from flask_framework.user.forms import RegisterForm
 from flask_framework.user.models import User
 from flask_framework.utils import flash_errors
 
+from flask_graphql import GraphQLView
+
 blueprint = Blueprint("public", __name__, static_folder="../static")
 
 
@@ -75,3 +77,13 @@ def about():
     """About page."""
     form = LoginForm(request.form)
     return render_template("public/about.html", form=form)
+
+
+@blueprint.route("/test/monggo")
+def mongo():
+    return "welcome monggo"
+
+
+@blueprint.route("/graphql")
+def graphql():
+    pass

@@ -17,6 +17,11 @@ from flask_framework.extensions import (
     migrate,
 )
 
+from flask_pymongo import PyMongo
+from flask_graphql import GraphQLView
+
+from schema import schema
+
 
 def create_app(config_object="flask_framework.settings"):
     """Create application factory, as explained here: http://flask.pocoo.org/docs/patterns/appfactories/.
@@ -25,6 +30,7 @@ def create_app(config_object="flask_framework.settings"):
     """
     app = Flask(__name__.split(".")[0])
     app.config.from_object(config_object)
+    app.config["MONGO_URI"] = "mongodb://127.0.0.1:27017/rukitamonggo"
     register_extensions(app)
     register_blueprints(app)
     register_errorhandlers(app)
@@ -89,3 +95,11 @@ def configure_logger(app):
     handler = logging.StreamHandler(sys.stdout)
     if not app.logger.handlers:
         app.logger.addHandler(handler)
+
+
+def register_graphql(app):
+    app.add_url_rule('/graphql', view_func=GraphQLView.as_view(
+        'graphql',
+        schema=schema,
+        graphiql=True,
+    ))

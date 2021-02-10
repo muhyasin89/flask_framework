@@ -1,0 +1,6 @@
+Phone number in flask
+
+https://www.twilio.com/blog/a-phone-number-input-field-for-flask-forms
+
+Choice
+https://medium.com/the-andela-way/how-to-create-django-like-choices-field-in-flask-sqlalchemy-1ca0e3a3af9d

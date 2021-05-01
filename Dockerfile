@@ -28,17 +28,17 @@ RUN npm install
 FROM base AS development
 RUN pip install --user -r requirements/dev.txt
 EXPOSE 2992
-EXPOSE 5000
+EXPOSE 8000
 CMD [ "npm", "start" ]
 
 # ================================= PRODUCTION =================================
-FROM base AS production
-RUN pip install --user -r requirements/prod.txt
-COPY supervisord.conf /etc/supervisor/supervisord.conf
-COPY supervisord_programs /etc/supervisor/conf.d
-EXPOSE 5000
-ENTRYPOINT ["/bin/bash", "shell_scripts/supervisord_entrypoint.sh"]
-CMD ["-c", "/etc/supervisor/supervisord.conf"]
+# FROM base AS production
+# RUN pip install --user -r requirements/prod.txt
+# COPY supervisord.conf /etc/supervisor/supervisord.conf
+# COPY supervisord_programs /etc/supervisor/conf.d
+# EXPOSE 8000
+# ENTRYPOINT ["/bin/bash", "shell_scripts/supervisord_entrypoint.sh"]
+# CMD ["-c", "/etc/supervisor/supervisord.conf"]
 
 # =================================== MANAGE ===================================
 FROM base AS manage
